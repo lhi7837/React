@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+import SignUp from "../components/auth/SignUp";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -15,175 +17,138 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
-        justifyContent: "center",
-        backgroundColor: "#f0f0f0",
-        padding: "20px",
-      }}
-    >
-      <img
-        src="/logo.webp"
-        alt="Kworld Logo"
-        style={{ width: "150px", height: "auto", marginBottom: "20px" }}
-      />
-
-      <form
-        onSubmit={handleLogin}
-        style={{ textAlign: "center", width: "100%", maxWidth: "400px" }}
-      >
-        <input
-          type="text"
-          placeholder="이메일"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "80%",
-            marginBottom: "10px",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "80%",
-            marginBottom: "10px",
-            padding: "10px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            width: "80%",
-            padding: "10px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            marginBottom: "10px",
-          }}
-        >
-          로그인
-        </button>
-
-        <button
-          type="button"
-          onClick={toggleSignUp}
-          style={{
-            width: "80%",
-            padding: "10px",
-            backgroundColor: "#2196F3",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-          }}
-        >
-          회원가입
-        </button>
-      </form>
+    <Container>
+      <LoginBox>
+        <Logo src="/kworld.png" alt="Kworld Logo" />
+        <form onSubmit={handleLogin}>
+          <StyledInput
+            type="text"
+            placeholder="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <StyledInput
+            type="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <LoginButton type="submit">로그인</LoginButton>
+          <SignUpButton type="button" onClick={toggleSignUp}>
+            회원가입
+          </SignUpButton>
+        </form>
+      </LoginBox>
 
       {isSignUpOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            left: "0",
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: "1000",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
-            <h2>회원가입</h2>
-            <input
-              type="text"
-              placeholder="이메일"
-              style={{
-                width: "80%",
-                marginBottom: "10px",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <input
-              type="password"
-              placeholder="비밀번호"
-              style={{
-                width: "80%",
-                marginBottom: "10px",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <input
-              type="password"
-              placeholder="비밀번호 확인"
-              style={{
-                width: "80%",
-                marginBottom: "10px",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <button
-              style={{
-                width: "80%",
-                padding: "10px",
-                backgroundColor: "#4CAF50",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                marginBottom: "10px",
-              }}
-              onClick={() => alert("회원가입 완료!")}
-            >
-              회원가입
-            </button>
-
-            <button
-              onClick={toggleSignUp}
-              style={{
-                width: "80%",
-                padding: "10px",
-                backgroundColor: "#f44336",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-              }}
-            >
-              닫기
-            </button>
-          </div>
-        </div>
+        <Overlay>
+          <SignUp onClose={toggleSignUp} /> {/* SignUp 모듈 사용 */}
+        </Overlay>
       )}
-    </div>
+    </Container>
   );
 }
 
 export default Login;
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f7f7f7;
+`;
+
+const LoginBox = styled.div`
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 350px;
+`;
+
+const Logo = styled.img`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const StyledInput = styled.input`
+  width: calc(100% - 24px);
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+`;
+
+const LoginButton = styled.button`
+  width: calc(100% - 24px);
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const SignUpButton = styled.button`
+  width: calc(100% - 24px);
+  padding: 12px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: #1e88e5;
+  }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const SignUpBox = styled.div`
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  text-align: center;
+`;
+
+const CloseButton = styled.button`
+  width: calc(100% - 24px);
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: #e53935;
+  }
+`;
