@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import SignUp from "../components/auth/SignUp";
+import { login } from "../services/Member";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert("로그인 성공!");
+    try {
+      const response = await login(email, password); // 로그인 API 호출
+      console.log(response); // API 응답 확인
+      alert(response.message); // 성공 시 메시지 표시
+    } catch (error) {
+      console.error(error); // 에러 로그 확인
+      alert(error.message || "로그인 실패");
+    }
   };
 
   const toggleSignUp = () => {

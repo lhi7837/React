@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { signup } from "../../services/Member"; // 회원가입 API 함수 import
 
 function SignUp({ onClose }) {
+  const [signupData, setSignupData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    gender: "",
+    studentNumber: "",
+    major: "",
+  });
+
+  // 학번 드롭다운 옵션 생성 (10학번 ~ 24학번)
   const generateYearOptions = () => {
     const years = [];
     for (let year = 10; year <= 24; year++) {
@@ -14,27 +26,84 @@ function SignUp({ onClose }) {
     return years;
   };
 
+  // 입력값 변경 핸들러
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignupData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  // 회원가입 버튼 클릭 시 API 호출
+  const handleSignUp = async () => {
+    try {
+      const response = await signup(signupData); // API 호출
+      alert("회원가입 성공!");
+      console.log("회원가입 성공:", response);
+      onClose(); // 모달 닫기
+    } catch (error) {
+      alert(error.message || "회원가입 실패");
+    }
+  };
+
   return (
     <SignUpBox>
       <CloseButton onClick={onClose}>X</CloseButton>
-      <h2>회원가입</h2>
-      <StyledInput type="text" placeholder="이메일" />
-      <StyledInput type="password" placeholder="비밀번호" />
-      <StyledInput type="password" placeholder="비밀번호 확인" />
+      <h2>Welcome to Kworld</h2>
+
+      <StyledInput
+        type="text"
+        name="email"
+        placeholder="이메일"
+        value={signupData.email}
+        onChange={handleChange}
+      />
+      <StyledInput
+        type="password"
+        name="password"
+        placeholder="비밀번호"
+        value={signupData.password}
+        onChange={handleChange}
+      />
+      <StyledInput
+        type="password"
+        name="confirmPassword"
+        placeholder="비밀번호 확인"
+        value={signupData.confirmPassword}
+        onChange={handleChange}
+      />
       <Row>
-        <LargeInput type="text" placeholder="이름" />
-        <SmallSelect>
-          <option value="male">남자</option>
-          <option value="female">여자</option>
+        <LargeInput
+          type="text"
+          name="name"
+          placeholder="이름"
+          value={signupData.name}
+          onChange={handleChange}
+        />
+        <SmallSelect
+          name="gender"
+          value={signupData.gender}
+          onChange={handleChange}
+        >
+          <option value="MALE">남자</option>
+          <option value="FEMALE">여자</option>
         </SmallSelect>
       </Row>
       <Row>
-        <LargeInput type="text" placeholder="전공" />
-        <SmallSelect>{generateYearOptions()}</SmallSelect>
+        <LargeInput
+          type="text"
+          name="major"
+          placeholder="전공"
+          value={signupData.major}
+          onChange={handleChange}
+        />
+        <SmallSelect
+          name="studentNumber"
+          value={signupData.studentNumber}
+          onChange={handleChange}
+        >
+          {generateYearOptions()}
+        </SmallSelect>
       </Row>
-      <SignUpButton onClick={() => alert("회원가입 완료!")}>
-        회원가입
-      </SignUpButton>
+      <SignUpButton onClick={handleSignUp}>회원가입</SignUpButton>
     </SignUpBox>
   );
 }
