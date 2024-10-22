@@ -83,6 +83,7 @@ function SignUp({ onClose }) {
           value={signupData.gender}
           onChange={handleChange}
         >
+          <option value="">성별</option>
           <option value="MALE">남자</option>
           <option value="FEMALE">여자</option>
         </SmallSelect>
@@ -100,6 +101,7 @@ function SignUp({ onClose }) {
           value={signupData.studentNumber}
           onChange={handleChange}
         >
+          <option value="">학번</option>
           {generateYearOptions()}
         </SmallSelect>
       </Row>
