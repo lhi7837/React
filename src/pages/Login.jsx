@@ -2,20 +2,31 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import SignUp from "../components/auth/SignUp";
 import { login } from "../services/Member";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await login(email, password); // 로그인 API 호출
-      console.log(response); // API 응답 확인
-      alert(response.message); // 성공 시 메시지 표시
+
+      console.log("로그인 응답:", response); // 응답 데이터 확인
+
+      if (response.member && response.accessToken) {
+        localStorage.setItem("user", JSON.stringify(response.member)); // member 객체 저장
+        localStorage.setItem("accessToken", response.accessToken.trim());
+
+        navigate("/dashboard"); // 대시보드로 이동
+      } else {
+        throw new Error("로그인에 실패했습니다.");
+      }
     } catch (error) {
-      console.error(error); // 에러 로그 확인
+      console.error("로그인 오류:", error);
       alert(error.message || "로그인 실패");
     }
   };
