@@ -1,81 +1,140 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import EditProfileModal from "./EditProfileModal";
 
 function WelcomeDashboard({ member, onLogout }) {
-  if (!member) {
-    return <p>유저 정보를 불러오는 중...</p>;
-  }
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const handleEditOpen = () => setIsEditOpen(true);
+  const handleEditClose = () => setIsEditOpen(false);
 
   return (
-    <Container>
-      <DashboardContainer>
-        <ProfileSection>
-          <Avatar src="/miniroom1.gif" alt="User Avatar" />
+    <DashboardContainer>
+      <Card>
+        <Header>
+          <Logo src="/kworld.png" alt="Kworld Logo" />
           <WelcomeMessage>{member.name}님 반갑습니다!</WelcomeMessage>
-        </ProfileSection>
+        </Header>
 
-        <ButtonGroup>
-          <Button>프로필 편집</Button>
-          <Button>도토리 충전 🌰</Button>
-          <Button>파도타기 🌊</Button>
-          <Button>내 미니홈피 바로가기 🏠</Button>
-          <LogoutButton onClick={onLogout}>로그아웃</LogoutButton>
-        </ButtonGroup>
-      </DashboardContainer>
-    </Container>
+        <Content>
+          <LeftSection>
+            <Avatar src={member.profileImage || "/1.png"} alt="User Avatar" />
+            <MiniHomeButton>내 미니홈피 바로가기 🏠</MiniHomeButton>
+          </LeftSection>
+
+          <RightSection>
+            <Button onClick={handleEditOpen}>프로필 편집 ✏️</Button>
+            <Button>도토리 충전 🌰</Button>
+            <Button>파도타기 🌊</Button>
+            <LogoutButton onClick={onLogout}>로그아웃</LogoutButton>
+          </RightSection>
+        </Content>
+
+        {isEditOpen && (
+          <EditProfileModal member={member} onClose={handleEditClose} />
+        )}
+      </Card>
+    </DashboardContainer>
   );
 }
 
 export default WelcomeDashboard;
 
-// 부모 컨테이너: 화면 중앙에 배치
-const Container = styled.div`
+// Styled Components
+const DashboardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* 화면 전체 높이를 차지 */
-  background-color: #f7f7f7; /* 배경 색상 */
+  height: 100vh;
+  background-color: #f0f4f8; /* 더 부드러운 배경색 */
 `;
 
-// 대시보드 컨테이너 스타일
-const DashboardContainer = styled.div`
-  background-color: #e8f4fa;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  text-align: center;
+const Card = styled.div`
+  background-color: #ffffff; /* 카드 배경을 흰색으로 변경 */
+  border: 2px solid #b0c4de; /* 경계선 색상을 약간 더 진하게 */
+  border-radius: 16px;
+  width: 600px;
+  padding: 32px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 8px rgba(0, 0, 0, 0.05); /* 외부와 내부 그림자 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const ProfileSection = styled.div`
-  margin-bottom: 20px;
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
 `;
 
-const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+const Logo = styled.img`
+  width: 100%; /* 로고 크기 조정 */
+  height: auto;
+  margin-bottom: 8px;
 `;
 
 const WelcomeMessage = styled.h2`
-  margin-top: 10px;
-  font-size: 24px;
+  font-size: 35px;
+  font-weight: bold;
   color: #333;
 `;
 
-const ButtonGroup = styled.div`
+const Content = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 16px;
+  gap: 16px; /* 좌우 섹션 간격 */
 `;
 
-const Button = styled.button`
-  padding: 12px;
+const LeftSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex: 1; /* 왼쪽 섹션 크기 */
+`;
+
+const Avatar = styled.img`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #a4c3da;
+`;
+
+const MiniHomeButton = styled.button`
   background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 8px;
+  padding: 10px 20px;
   cursor: pointer;
+  font-size: 16px;
+  width: 75%;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const RightSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1; /* 오른쪽 섹션 크기 */
+`;
+
+const Button = styled.button`
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 80%;
 
   &:hover {
     background-color: #45a049;

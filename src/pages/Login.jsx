@@ -15,18 +15,17 @@ function Login() {
     try {
       const response = await login(email, password); // 로그인 API 호출
 
-      console.log("로그인 응답:", response); // 응답 데이터 확인
-
-      if (response.member && response.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.member)); // member 객체 저장
-        localStorage.setItem("accessToken", response.accessToken.trim());
+      // 응답에 accessToken과 member 정보가 있는지 확인
+      if (response.accessToken && response.member) {
+        localStorage.setItem("user", JSON.stringify(response.member));
+        localStorage.setItem("accessToken", response.accessToken);
 
         navigate("/dashboard"); // 대시보드로 이동
       } else {
-        throw new Error("로그인에 실패했습니다.");
+        throw new Error("로그인에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
-      console.error("로그인 오류:", error);
+      console.error("로그인 오류:", error); // 에러 로그 확인
       alert(error.message || "로그인 실패");
     }
   };
